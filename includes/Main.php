@@ -15,7 +15,7 @@ namespace Indigit\Imagination;
 defined( 'ABSPATH' ) || exit;
 
 use Indigit\Imagination\Admin\{Settings, Site_Health};
-use Indigit\Imagination\Libvips\{Capability_Cache, Runtime};
+use Indigit\Imagination\Libvips\{Capability_Cache, Requirements, Runtime};
 
 /**
  * Main plugin class
@@ -81,7 +81,7 @@ final class Main {
 	 * @return string[]
 	 */
 	public function register_editor( $image_editors ): array {
-		if ( ! Image_Editor_Libvips::has_php_requirements() ) {
+		if ( ! Requirements::has_php_requirements() ) {
 			return $image_editors;
 		}
 

@@ -20,14 +20,6 @@ namespace Indigit\Imagination;
 
 defined( 'ABSPATH' ) || exit;
 
-/*
- * _wp_image_editor_choose() loads these classes when WordPress selects an
- * image editor. Our adapter class must extend WP_Image_Editor_Imagick when
- * this file itself is loaded, so explicitly load the parent classes here.
- */
-require_once ABSPATH . WPINC . '/class-wp-image-editor.php';
-require_once ABSPATH . WPINC . '/class-wp-image-editor-imagick.php';
-
 /**
  * Libvips-backed adapter for HEIC/HEIF images.
  *

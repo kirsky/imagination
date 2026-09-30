@@ -45,7 +45,7 @@ require __DIR__ . '/vendor/autoload.php';
 /*
  * Block libvips' untrusted loaders (ImageMagick, JPEG XL, ...). libvips
  * reads this once, when it is first initialized in the process, so it is set
- * here, before any php-vips call. See Image_Editor_Libvips::init_libvips().
+ * here, before any php-vips call. See Libvips\Requirements::init_libvips().
  */
 if ( false === getenv( 'VIPS_BLOCK_UNTRUSTED' ) ) {
 	putenv( // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_putenv

@@ -11,7 +11,6 @@ namespace Indigit\Imagination\Libvips;
 
 defined( 'ABSPATH' ) || exit;
 
-use Indigit\Imagination\Image_Editor_Libvips;
 use Indigit\Imagination\Libvips_Encoder;
 use Indigit\Imagination\Vendor\Jcupitt\Vips\Config;
 
@@ -72,7 +71,7 @@ final class Runtime {
 	public function refresh(): void {
 		Capability_Cache::clear();
 
-		if ( null === Image_Editor_Libvips::get_unmet_requirement() ) {
+		if ( null === Requirements::get_unmet_requirement() ) {
 			$this->get_input_formats();
 			$this->get_output_formats();
 		}
@@ -84,14 +83,14 @@ final class Runtime {
 	 * @return string|null Translated description, or null when all requirements are met.
 	 */
 	public function describe_unmet_requirement(): ?string {
-		switch ( Image_Editor_Libvips::get_unmet_requirement() ) {
-			case Image_Editor_Libvips::REQUIREMENT_FFI_EXTENSION:
+		switch ( Requirements::get_unmet_requirement() ) {
+			case Requirements::REQUIREMENT_FFI_EXTENSION:
 				return __(
 					'The PHP FFI extension is not loaded.',
 					'imagination'
 				);
 
-			case Image_Editor_Libvips::REQUIREMENT_FFI_ENABLE:
+			case Requirements::REQUIREMENT_FFI_ENABLE:
 				return sprintf(
 					/* translators: 1: Current value of the ffi.enable setting, 2: PHP SAPI name, e.g. fpm-fcgi. */
 					__(
@@ -102,20 +101,20 @@ final class Runtime {
 					PHP_SAPI
 				);
 
-			case Image_Editor_Libvips::REQUIREMENT_PHP_VIPS:
+			case Requirements::REQUIREMENT_PHP_VIPS:
 				return __(
 					'The php-vips library is missing. Reinstall the plugin.',
 					'imagination'
 				);
 
-			case Image_Editor_Libvips::REQUIREMENT_LIBVIPS:
+			case Requirements::REQUIREMENT_LIBVIPS:
 				return sprintf(
 					/* translators: %s: Error message from php-vips. */
 					__( 'libvips could not be loaded: %s', 'imagination' ),
 					$this->get_load_error()
 				);
 
-			case Image_Editor_Libvips::REQUIREMENT_LIBVIPS_VERSION:
+			case Requirements::REQUIREMENT_LIBVIPS_VERSION:
 				return sprintf(
 					/* translators: 1: Installed libvips version, 2: Minimum libvips version. */
 					__(
@@ -123,7 +122,7 @@ final class Runtime {
 						'imagination'
 					),
 					$this->get_version(),
-					Image_Editor_Libvips::MIN_LIBVIPS_VERSION
+					Requirements::MIN_LIBVIPS_VERSION
 				);
 
 			default:
@@ -138,14 +137,14 @@ final class Runtime {
 	 * @return string|null E.g. `ffi_enable (ffi.enable=0, fpm-fcgi)`, or null when all requirements are met.
 	 */
 	public function get_unmet_requirement_details(): ?string {
-		$requirement = Image_Editor_Libvips::get_unmet_requirement();
+		$requirement = Requirements::get_unmet_requirement();
 
 		if ( null === $requirement ) {
 			return null;
 		}
 
 		switch ( $requirement ) {
-			case Image_Editor_Libvips::REQUIREMENT_FFI_ENABLE:
+			case Requirements::REQUIREMENT_FFI_ENABLE:
 				$details = sprintf(
 					'ffi.enable=%s, %s',
 					(string) ini_get( 'ffi.enable' ),
@@ -153,11 +152,11 @@ final class Runtime {
 				);
 				break;
 
-			case Image_Editor_Libvips::REQUIREMENT_LIBVIPS:
+			case Requirements::REQUIREMENT_LIBVIPS:
 				$details = $this->get_load_error();
 				break;
 
-			case Image_Editor_Libvips::REQUIREMENT_LIBVIPS_VERSION:
+			case Requirements::REQUIREMENT_LIBVIPS_VERSION:
 				$details = $this->get_version();
 				break;
 
