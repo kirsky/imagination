@@ -22,7 +22,15 @@ use Indigit\Imagination\Vendor\Jcupitt\Vips\Config;
 final class Runtime {
 
 	/**
-	 * Compression formats whose libheif codecs are reported.
+	 * Compression formats whose libheif codecs are reported: HEVC for HEIC,
+	 * AV1 for AVIF.
+	 *
+	 * The numbers are the values of libheif's C `enum heif_compression_format`.
+	 * C enum values exist only in the header, not in the compiled library, so
+	 * FFI cannot read them from libheif. They are copied from the header. They
+	 * are the same in libheif 1.14.2, 1.15.0 and 1.17.0.
+	 *
+	 * @see https://github.com/strukturag/libheif/blob/v1.15.0/libheif/heif.h#L953-L956 heif_compression_HEVC = 1, heif_compression_AV1 = 4.
 	 *
 	 * @var array<string, int> Values of libheif's `enum heif_compression_format`, keyed by name.
 	 */
@@ -32,7 +40,8 @@ final class Runtime {
 	];
 
 	/**
-	 * Maximum number of libheif codecs listed per compression format.
+	 * Size of the C array that libheif fills with codec descriptors, so the
+	 * most codecs listed per compression format.
 	 *
 	 * @var int
 	 */
@@ -288,6 +297,19 @@ final class Runtime {
 	 * Gets the SIMD instruction set that libvips uses: the best one it was
 	 * built with that this CPU supports.
 	 *
+	 * Since 8.15, libvips can use Google's Highway library for SIMD. Highway
+	 * gives each instruction set (AVX2, SSE4, NEON, ...) one bit, and a lower
+	 * bit means a better set. libvips reports two bit masks: the sets it was
+	 * built with, and the sets this CPU supports. The best set in use is the
+	 * lowest bit set in both masks.
+	 *
+	 * The three functions do not exist before libvips 8.15. Then the
+	 * declaration fails and this returns null. A libvips built with Orc
+	 * instead of Highway reports an empty mask.
+	 *
+	 * @see https://github.com/libvips/libvips/blob/v8.15.0/libvips/iofuncs/vector.cpp#L116-L171 libvips' three functions (Highway's HWY_TARGETS, SupportedTargets(), TargetName()).
+	 * @see https://github.com/google/highway/blob/1.0.7/hwy/detect_targets.h#L49 Highway: "A lower value is "better"".
+	 *
 	 * @return string|null E.g. `AVX2`, or null without Highway (libvips < 8.15, or built with Orc).
 	 */
 	public function get_vector_target(): ?string {
@@ -309,7 +331,8 @@ final class Runtime {
 			return null;
 		}
 
-		// Highway numbers better targets with lower bits.
+		// Keeps only the lowest set bit, the best target: in two's complement,
+		// -$x flips every bit above the lowest set bit of $x.
 		$best = $targets & -$targets;
 
 		return Native::call( $ffi, 'vips_vector_target_name', $best );
@@ -354,6 +377,13 @@ final class Runtime {
 	/**
 	 * Gets the names of the HEVC and AV1 decoders available to libheif.
 	 *
+	 * For each format, libheif fills a C array of descriptor pointers and
+	 * returns how many it wrote (at most MAX_HEIF_CODECS). Each descriptor
+	 * then gives the decoder's name. These functions exist from libheif
+	 * 1.15.0. Before that, the declaration fails and this returns null.
+	 *
+	 * @see https://github.com/strukturag/libheif/blob/v1.15.0/libheif/heif.h#L1284-L1298 heif_get_decoder_descriptors() and heif_decoder_descriptor_get_name().
+	 *
 	 * @return array<string, list<string>>|null Names keyed by compression format, or null when libheif cannot list them (before 1.15).
 	 */
 	public function get_heif_decoders(): ?array {
@@ -395,7 +425,12 @@ final class Runtime {
 
 	/**
 	 * Gets the names of the HEVC and AV1 encoders available to libheif.
-	 * libheif 1.17 lists a plugin encoder only after its first use.
+	 *
+	 * Works like get_heif_decoders(). The second argument, a name filter, is
+	 * NULL to list every encoder. libheif 1.17.6 lists a plugin encoder only
+	 * after its first use (measured on Ubuntu 24.04).
+	 *
+	 * @see https://github.com/strukturag/libheif/blob/v1.15.0/libheif/heif.h#L1318-L1330 heif_get_encoder_descriptors() and heif_encoder_descriptor_get_name().
 	 *
 	 * @return array<string, list<string>>|null Names keyed by compression format, or null when libheif cannot list them (before 1.15).
 	 */
@@ -440,6 +475,14 @@ final class Runtime {
 	/**
 	 * Gets the image libraries mapped into this process, including libvips'
 	 * modules and libheif's plugins.
+	 *
+	 * Linux lists every file mapped into a process in `/proc/self/maps`, one
+	 * mapping per line, with the file's path as the last field. A library
+	 * appears on several lines (code, data), so the names are deduplicated.
+	 * With open_basedir set, is_readable() on that file raises a PHP warning,
+	 * so this returns null first.
+	 *
+	 * @see https://man7.org/linux/man-pages/man5/proc_pid_maps.5.html proc_pid_maps(5): the file format.
 	 *
 	 * @return array<string, list<string>>|null File names keyed by directory, or null when the memory map of this process cannot be read (outside Linux, or with open_basedir set).
 	 */
@@ -487,6 +530,9 @@ final class Runtime {
 
 	/**
 	 * Allocates an array for libheif codec descriptors.
+	 *
+	 * The C type is an array of MAX_HEIF_CODECS pointers to descriptors. PHP
+	 * owns the memory, and libheif writes the pointers into it.
 	 *
 	 * @param \FFI   $ffi  FFI instance that declares the `heif_{$kind}_descriptor` struct.
 	 * @param string $kind `decoder` or `encoder`.
