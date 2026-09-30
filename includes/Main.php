@@ -55,6 +55,11 @@ final class Main {
 		$this->site_health->register();
 
 		add_filter( 'wp_image_editors', [ $this, 'register_editor' ], 20 );
+		add_action(
+			'shutdown',
+			[ Requirements::class, 'keep_libvips_loaded' ],
+			PHP_INT_MAX
+		);
 	}
 
 	/**
