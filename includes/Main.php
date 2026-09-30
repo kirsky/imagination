@@ -4,8 +4,6 @@
  *
  * @package Indigit\Imagination
  * @since 1.0.0
- *
- * phpcs:disable Squiz.Commenting.InlineComment.InvalidEndChar
  */
 
 declare(strict_types=1);
