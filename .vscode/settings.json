@@ -1,0 +1,10 @@
+{
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.tabSize": 4,
+	"editor.indentSize": "tabSize",
+	"[php]": {
+		"editor.insertSpaces": false,
+		"editor.tabSize": 4
+	}
+}

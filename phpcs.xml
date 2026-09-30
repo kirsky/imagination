@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<ruleset name="Indigit Imagination">
+    <description>PHP CodeSniffer ruleset for Imagination plugin</description>
+
+    <file>.</file>
+
+    <!-- Exclude paths -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/vendor-prefixed/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/phpstan-bootstrap.php</exclude-pattern>
+
+    <arg value="ps" />
+    <arg name="colors"/>
+    <arg name="tab-width" value="4"/>
+
+    <config name="minimum_wp_version" value="6.0"/>
+
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="imagination"/>
+                <element value="default"/>
+            </property>
+        </properties>
+    </rule>
+
+    <rule ref="WordPress" />
+
+    <rule ref="WordPress-Extra">
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+        <exclude name="Universal.Operators.DisallowShortTernary"/>
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+        <exclude name="WordPress.WP.I18n.MissingArgDomainDefault"/>
+    </rule>
+
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+
+    <rule ref="WordPress.WP.DeprecatedFunctions">
+        <properties>
+            <property name="minimum_wp_version" value="6.0" />
+        </properties>
+    </rule>
+
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <properties>
+            <property name="prefixes" type="array">
+                <element value="imagination"/>
+                <element value="Indigit\Imagination"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- function/method CALLS -->
+    <rule ref="SlevomatCodingStandard.Functions.RequireMultiLineCall">
+        <properties>
+            <property name="minLineLength" value="80"/>
+        </properties>
+    </rule>
+
+    <!-- method SIGNATURES/declarations -->
+    <rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature">
+        <properties>
+            <property name="minLineLength" value="80"/>
+        </properties>
+    </rule>
+
+    <!-- if/elseif/while CONDITIONS with && / || -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition">
+        <properties>
+            <property name="minLineLength" value="80"/>
+            <property name="booleanOperatorOnPreviousLine" value="true"/>
+        </properties>
+    </rule>
+
+    <rule ref="WordPress-Docs"/>
+</ruleset>
