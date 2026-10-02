@@ -3,20 +3,14 @@
  * Functions
  *
  * @package Imagination
- */
-
-namespace Indigit\Imagination;
-
-/**
- * Functions
- *
- * @package Imagination
  *
  * phpcs:disable WordPress.PHP.NoSilencedErrors.Discouraged
  * phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fopen
  * phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fread
  * phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fclose
  */
+
+namespace Indigit\Imagination;
 
 /**
  * Inspects a WebP file's compression type, alpha and animation flags by
