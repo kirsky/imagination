@@ -20,8 +20,10 @@ namespace Indigit\Imagination;
  * 'animated-alpha' and wraps VP8L heights above 4096, it reads the VP8X flags
  * and the real bitstream chunk (or the first animation frame).
  *
- * `lossless` is null only for a malformed or truncated file. `mixed_frame_types`
- * is true for animations, whose later frames may use the other codec.
+ * `lossless` is null for a malformed or truncated file, and when the image
+ * data is not found within the first few chunks of the file or of its first
+ * animation frame. `mixed_frame_types` is true for animations, whose later
+ * frames may use the other codec.
  *
  * @param string $filename Path to a WebP file.
  * @return array{
@@ -59,7 +61,24 @@ function get_webp_info_precise( $filename ) {
 		return $result;
 	}
 
+	/*
+	 * Most chunks read in one list (the file's, then the first frame's) before
+	 * giving up on the image data. A valid file lists at most VP8X, ICCP, ANIM
+	 * and ANMF, and a frame lists ALPH ahead of its bitstream. The rest is slack
+	 * for unknown chunks, which the spec lets appear in any order and which
+	 * libvips still loads in the millions.
+	 *
+	 * @see https://developers.google.com/speed/webp/docs/riff_container#extended_file_format
+	 * @see https://developers.google.com/speed/webp/docs/riff_container#unknown_chunks
+	 */
+	$max_chunks = 16;
+	$chunks     = 0;
+
 	while ( ! feof( $fh ) ) {
+		if ( ++$chunks > $max_chunks ) {
+			break;
+		}
+
 		$chunk_header = fread( $fh, 8 );
 		if ( false === $chunk_header || strlen( $chunk_header ) < 8 ) {
 			break; // Truncated or EOF.
@@ -131,7 +150,13 @@ function get_webp_info_precise( $filename ) {
 					$fh,
 					$chunk_start + 16
 				); // Skip the fixed 16-byte frame header.
+				$sub_chunks = 0;
+
 				while ( ftell( $fh ) < $chunk_end ) {
+					if ( ++$sub_chunks > $max_chunks ) {
+						break;
+					}
+
 					$sub_header = fread( $fh, 8 );
 					if ( false === $sub_header || strlen( $sub_header ) < 8 ) {
 						break;
