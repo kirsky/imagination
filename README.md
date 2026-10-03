@@ -1,4 +1,4 @@
-# Imagination
+# Indigit Imagination
 
 Make WordPress image processing very fast with [libvips](https://www.libvips.org/). It resizes and converts WebP, AVIF, HEIC and more. All local, no external services involved.
 
@@ -12,24 +12,24 @@ This page is for people who work with the source code. The description, the FAQ 
 - [Composer](https://getcomposer.org/download/) to install the PHP libraries.
 - `curl` and `sha256sum`, which the Composer scripts use to fetch and check Strauss (see below).
 
-Imagination is tested on Linux only.
+Indigit Imagination is tested on Linux only.
 
 ## Install from source
 
-1. Clone this repository into `wp-content/plugins/imagination`.
+1. Clone this repository into `wp-content/plugins/indigit-imagination`.
 2. Run this in the plugin folder:
 
    ```bash
    composer install --no-dev -o
    ```
 
-3. Activate Imagination in WordPress.
+3. Activate Indigit Imagination in WordPress.
 
 The plugin needs the `vendor/` folder that Composer creates. Without it, wp-admin shows an error notice and the plugin does nothing.
 
 ## The bundled libraries
 
-Imagination uses [php-vips](https://github.com/libvips/php-vips) to call libvips from PHP. It also uses [PSR Log](https://github.com/php-fig/log), which php-vips needs. Both are MIT licensed.
+Indigit Imagination uses [php-vips](https://github.com/libvips/php-vips) to call libvips from PHP. It also uses [PSR Log](https://github.com/php-fig/log), which php-vips needs. Both are MIT licensed.
 
 Other plugins can ship their own copy of php-vips. To avoid clashes, this plugin renames the namespaces of both libraries with [Strauss](https://github.com/BrianHenryIE/strauss). The result is committed in `vendor-prefixed/`. The code there is third party code with a new namespace prefix (`Indigit\Imagination\Vendor\`). It is not edited by hand.
 
@@ -70,4 +70,4 @@ The settings are in [phpcs.xml](phpcs.xml) and [phpstan.neon](phpstan.neon). Nei
 
 ## License
 
-Imagination is free software under the [GPL-2.0-or-later](https://www.gnu.org/licenses/gpl-2.0.html). The full text is in [LICENSE](LICENSE).
+Indigit Imagination is free software under the [GPL-2.0-or-later](https://www.gnu.org/licenses/gpl-2.0.html). The full text is in [LICENSE](LICENSE).

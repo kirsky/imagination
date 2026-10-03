@@ -144,7 +144,7 @@ final class Requirements {
 	 * Blocks libvips' untrusted loaders (libvips 8.13+), next to the editor's
 	 * loader allowlist. Uses Config::setBlockUntrusted() when php-vips has it,
 	 * else the environment variable, which libvips reads once at
-	 * initialization (the bootstrap in imagination.php sets it too).
+	 * initialization (the bootstrap in indigit-imagination.php sets it too).
 	 *
 	 * @return void
 	 */

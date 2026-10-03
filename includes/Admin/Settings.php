@@ -16,7 +16,7 @@ use Indigit\Imagination\{Options, Options_Data};
 use Indigit\Imagination\Vendor\Jcupitt\Vips\Kernel;
 
 /**
- * Registers and renders the Settings > Imagination admin page.
+ * Registers and renders the Settings > Indigit Imagination admin page.
  */
 final class Settings {
 
@@ -114,8 +114,8 @@ final class Settings {
 	 */
 	public function register_menu(): void {
 		add_options_page(
-			__( 'Imagination', 'imagination' ),
-			__( 'Imagination', 'imagination' ),
+			__( 'Indigit Imagination', 'indigit-imagination' ),
+			__( 'Indigit Imagination', 'indigit-imagination' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			[ $this, 'render_page' ]
@@ -138,14 +138,14 @@ final class Settings {
 
 		add_settings_section(
 			'imagination_general',
-			__( 'General', 'imagination' ),
+			__( 'General', 'indigit-imagination' ),
 			'__return_false',
 			self::PAGE_SLUG
 		);
 
 		add_settings_field(
 			'imagination_resampling_kernel',
-			__( 'Resampling kernel', 'imagination' ),
+			__( 'Resampling kernel', 'indigit-imagination' ),
 			[ $this, 'render_resampling_kernel_field' ],
 			self::PAGE_SLUG,
 			'imagination_general',
@@ -154,7 +154,7 @@ final class Settings {
 
 		add_settings_field(
 			'imagination_big_image_size_threshold',
-			__( 'Big image threshold', 'imagination' ),
+			__( 'Big image threshold', 'indigit-imagination' ),
 			[ $this, 'render_big_image_size_threshold_field' ],
 			self::PAGE_SLUG,
 			'imagination_general',
@@ -163,7 +163,7 @@ final class Settings {
 
 		add_settings_field(
 			'imagination_strip_meta',
-			__( 'Strip metadata', 'imagination' ),
+			__( 'Strip metadata', 'indigit-imagination' ),
 			[ $this, 'render_strip_meta_field' ],
 			self::PAGE_SLUG,
 			'imagination_general',
@@ -172,7 +172,7 @@ final class Settings {
 
 		add_settings_field(
 			'imagination_keep_icc_only',
-			__( 'Keep only ICC metadata', 'imagination' ),
+			__( 'Keep only ICC metadata', 'indigit-imagination' ),
 			[ $this, 'render_keep_icc_only_field' ],
 			self::PAGE_SLUG,
 			'imagination_general',
@@ -182,7 +182,7 @@ final class Settings {
 		if ( function_exists( 'wp_is_client_side_media_processing_enabled' ) ) {
 			add_settings_field(
 				'imagination_disable_client_side_processing',
-				__( 'Client-side processing', 'imagination' ),
+				__( 'Client-side processing', 'indigit-imagination' ),
 				[ $this, 'render_client_side_processing_field' ],
 				self::PAGE_SLUG,
 				'imagination_general',
@@ -196,14 +196,14 @@ final class Settings {
 
 		add_settings_section(
 			'imagination_troubleshooting',
-			__( 'Troubleshooting', 'imagination' ),
+			__( 'Troubleshooting', 'indigit-imagination' ),
 			'__return_false',
 			self::PAGE_SLUG
 		);
 
 		add_settings_field(
 			'imagination_log_errors',
-			__( 'Error log', 'imagination' ),
+			__( 'Error log', 'indigit-imagination' ),
 			[ $this, 'render_log_errors_field' ],
 			self::PAGE_SLUG,
 			'imagination_troubleshooting',
@@ -357,21 +357,21 @@ final class Settings {
 				value="<?php echo esc_attr( Kernel::LINEAR ); ?>"
 				<?php selected( $resampling_kernel, Kernel::LINEAR ); ?>
 			>
-				<?php esc_html_e( 'Linear', 'imagination' ); ?>
+				<?php esc_html_e( 'Linear', 'indigit-imagination' ); ?>
 			</option>
 
 			<option
 				value="<?php echo esc_attr( Kernel::LANCZOS3 ); ?>"
 				<?php selected( $resampling_kernel, Kernel::LANCZOS3 ); ?>
 			>
-				<?php esc_html_e( 'Lanczos3', 'imagination' ); ?>
+				<?php esc_html_e( 'Lanczos3', 'indigit-imagination' ); ?>
 			</option>
 		</select>
 		<p class="description">
 			<?php
 			esc_html_e(
 				'Linear matches the default "Triangle" filter in WordPress’s Imagick editor. It balances speed and small file sizes, making it ideal for logos, screenshots, and flat graphics. Lanczos3 offers superior sharpness and detail for photos, though it processes slightly slower and produces larger files.',
-				'imagination'
+				'indigit-imagination'
 			);
 			?>
 		</p>
@@ -396,7 +396,7 @@ final class Settings {
 			<?php
 			esc_html_e(
 				'Images exceeding this pixel limit in width or height are scaled down to serve as the full-size version on your site. The original upload remains stored on disk but is not used directly. This corresponds to WordPress’s `big_image_size_threshold`. Set to 0 to keep full-resolution uploads, or leave empty for the default limit (2560 px).',
-				'imagination'
+				'indigit-imagination'
 			);
 			?>
 		</p>
@@ -413,7 +413,7 @@ final class Settings {
 		if ( $chosen !== $in_effect ) {
 			$this->render_in_effect(
 				0 === $in_effect
-					? __( '0 (no scaling)', 'imagination' )
+					? __( '0 (no scaling)', 'indigit-imagination' )
 					: number_format_i18n( $in_effect )
 			);
 		}
@@ -433,12 +433,15 @@ final class Settings {
 				true
 			);
 		$choices    = [
-			''      => __( 'WordPress default', 'imagination' ),
+			''      => __( 'WordPress default', 'indigit-imagination' ),
 			'strip' => __(
 				'Strip, keeping ICC, EXIF, XMP and IPTC',
-				'imagination'
+				'indigit-imagination'
 			),
-			'keep'  => __( 'Don\'t strip, keep all metadata', 'imagination' ),
+			'keep'  => __(
+				'Don\'t strip, keep all metadata',
+				'indigit-imagination'
+			),
 		];
 
 		printf(
@@ -461,7 +464,7 @@ final class Settings {
 			<?php
 			esc_html_e(
 				'Controls image metadata removal via WordPress’s `image_strip_meta`. Selecting WordPress default performs basic metadata stripping, but it does not remove sensitive data like GPS coordinates, camera details, or copyright info. Use "Keep only ICC metadata" below for a stricter, privacy-focused clean-up.',
-				'imagination'
+				'indigit-imagination'
 			);
 			?>
 		</p>
@@ -494,7 +497,7 @@ final class Settings {
 			checked( $keep_icc_only, true, false ),
 			esc_html__(
 				'Drop EXIF, XMP and IPTC even when metadata is not stripped above',
-				'imagination'
+				'indigit-imagination'
 			)
 		);
 		?>
@@ -502,7 +505,7 @@ final class Settings {
 			<?php
 			esc_html_e(
 				'Overrides "Strip metadata": always keeps only the ICC colour profile.',
-				'imagination'
+				'indigit-imagination'
 			);
 			?>
 		</p>
@@ -520,21 +523,27 @@ final class Settings {
 			'<label><input type="checkbox" id="%1$s" name="%1$s" value="1" %2$s /> %3$s</label>',
 			esc_attr( $field_name ),
 			checked( $disabled, true, false ),
-			esc_html__( 'Process all uploads on the server', 'imagination' )
+			esc_html__(
+				'Process all uploads on the server',
+				'indigit-imagination'
+			)
 		);
 		?>
 		<p class="description">
 			<?php
 			esc_html_e(
-				'The WordPress block editor resizes images directly in the browser, bypassing server-side processing. Check this box to force Imagination to process all uploads on the server instead.',
-				'imagination'
+				'The WordPress block editor resizes images directly in the browser, bypassing server-side processing. Check this box to force Indigit Imagination to process all uploads on the server instead.',
+				'indigit-imagination'
 			);
 			?>
 		</p>
 		<?php
 		if ( $disabled && wp_is_client_side_media_processing_enabled() ) {
 			$this->render_in_effect(
-				__( 'images are processed in the browser', 'imagination' )
+				__(
+					'images are processed in the browser',
+					'indigit-imagination'
+				)
 			);
 		}
 	}
@@ -547,14 +556,14 @@ final class Settings {
 			'<label><input type="checkbox" id="%1$s" name="%1$s" value="1" %2$s /> %3$s</label>',
 			esc_attr( Options::field_name( 'log_errors' ) ),
 			checked( $this->options->get()->log_errors, true, false ),
-			esc_html__( 'Log image processing errors', 'imagination' )
+			esc_html__( 'Log image processing errors', 'indigit-imagination' )
 		);
 		?>
 		<p class="description">
 			<?php
 			esc_html_e(
-				'Keeps the last 10 errors, without file names, and shows them in Tools > Site Health > Info > Imagination. Turning this off deletes them.',
-				'imagination'
+				'Keeps the last 10 errors, without file names, and shows them in Tools > Site Health > Info > Indigit Imagination. Turning this off deletes them.',
+				'indigit-imagination'
 			);
 			?>
 		</p>
@@ -575,7 +584,7 @@ final class Settings {
 					/* translators: %s: Value in effect. */
 					__(
 						'A plugin or the theme changes this setting. In effect: %s.',
-						'imagination'
+						'indigit-imagination'
 					),
 					$value
 				)

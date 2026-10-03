@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       Imagination
- * Plugin URI:        https://indigit.info/imagination/
+ * Plugin Name:       Indigit Imagination
+ * Plugin URI:        https://indigit.info/indigit-imagination/
  * Description:       Runs WordPress image processing through libvips, a fast multi-threaded image library.
  * Version:           1.0.0
  * Requires at least: 6.0
@@ -10,7 +10,7 @@
  * Author URI:        https://indigit.info
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       imagination
+ * Text Domain:       indigit-imagination
  *
  * @package           Imagination
  */
@@ -30,8 +30,8 @@ if ( ! is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
 			printf(
 				'<div class="notice notice-error"><p>%s</p></div>',
 				esc_html__(
-					'Imagination cannot start because its vendor folder is missing. Install the release ZIP, or run "composer install" in the plugin folder.',
-					'imagination'
+					'Indigit Imagination cannot start because its vendor folder is missing. Install the release ZIP, or run "composer install" in the plugin folder.',
+					'indigit-imagination'
 				)
 			);
 		}
