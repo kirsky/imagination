@@ -4,12 +4,12 @@ includes:
 parameters:
     level: 6
     paths:
-        - imagination.php
+        - indigit-imagination.php
         - includes
     excludePaths:
         # Third-party code prefixed by Strauss; committed but not ours to analyse.
         - vendor-prefixed
-    # Keep in sync with "Requires PHP" in imagination.php.
+    # Keep in sync with "Requires PHP" in indigit-imagination.php.
     phpVersion: 70400
     bootstrapFiles:
         - phpstan-bootstrap.php

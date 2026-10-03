@@ -96,7 +96,7 @@ final class Runtime {
 			case Requirements::REQUIREMENT_FFI_EXTENSION:
 				return __(
 					'The PHP FFI extension is not loaded.',
-					'imagination'
+					'indigit-imagination'
 				);
 
 			case Requirements::REQUIREMENT_FFI_ENABLE:
@@ -104,7 +104,7 @@ final class Runtime {
 					/* translators: 1: Current value of the ffi.enable setting, 2: PHP SAPI name, e.g. fpm-fcgi. */
 					__(
 						'The PHP setting ffi.enable is "%1$s" for %2$s. It must be "true".',
-						'imagination'
+						'indigit-imagination'
 					),
 					(string) ini_get( 'ffi.enable' ),
 					PHP_SAPI
@@ -113,13 +113,16 @@ final class Runtime {
 			case Requirements::REQUIREMENT_PHP_VIPS:
 				return __(
 					'The php-vips library is missing. Reinstall the plugin.',
-					'imagination'
+					'indigit-imagination'
 				);
 
 			case Requirements::REQUIREMENT_LIBVIPS:
 				return sprintf(
 					/* translators: %s: Error message from php-vips. */
-					__( 'libvips could not be loaded: %s', 'imagination' ),
+					__(
+						'libvips could not be loaded: %s',
+						'indigit-imagination'
+					),
 					$this->get_load_error()
 				);
 
@@ -128,7 +131,7 @@ final class Runtime {
 					/* translators: 1: Installed libvips version, 2: Minimum libvips version. */
 					__(
 						'libvips %1$s is installed. Version %2$s or newer is needed.',
-						'imagination'
+						'indigit-imagination'
 					),
 					$this->get_version(),
 					Requirements::MIN_LIBVIPS_VERSION

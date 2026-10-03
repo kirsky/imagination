@@ -172,9 +172,8 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 			return new \WP_Error(
 				'error_loading_image',
 				__(
-					'File does not exist?',
-					// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
-					'default'
+					'The image file could not be found.',
+					'indigit-imagination'
 				),
 				$this->file
 			);
@@ -201,7 +200,10 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 					return $this->log_error(
 						new \WP_Error(
 							'error_loading_image',
-							__( 'Could not read image stream.', 'imagination' ),
+							__(
+								'Could not read image stream.',
+								'indigit-imagination'
+							),
 							$this->file
 						),
 						__FUNCTION__
@@ -219,7 +221,7 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 				return $this->log_error(
 					new \WP_Error(
 						'invalid_image',
-						__( 'Unsupported image format.', 'imagination' ),
+						__( 'Unsupported image format.', 'indigit-imagination' ),
 						$this->file
 					),
 					__FUNCTION__
@@ -291,7 +293,7 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 					/* translators: 1: Number of pixels in the image, 2: Maximum number of pixels. */
 					__(
 						'The image is too large to process: %1$s pixels (the limit is %2$s).',
-						'imagination'
+						'indigit-imagination'
 					),
 					number_format_i18n( $pixels ),
 					number_format_i18n( $max_pixels )
@@ -925,9 +927,8 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 			return new \WP_Error(
 				'image_subsize_create_error',
 				__(
-					'Cannot resize the image. Both width and height are not set.',
-					// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
-					'default'
+					'A width or height is required to resize the image.',
+					'indigit-imagination'
 				),
 				$this->file
 			);
@@ -952,9 +953,8 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 			return new \WP_Error(
 				'image_subsize_create_error',
 				__(
-					'The image already has the requested size.',
-					// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
-					'default'
+					'The image is already the requested size.',
+					'indigit-imagination'
 				),
 				$this->file
 			);
@@ -1048,7 +1048,10 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 		if ( $width < 1 || $height < 1 ) {
 			return new \WP_Error(
 				'image_crop_error',
-				__( 'The crop area is outside the image.', 'imagination' ),
+				__(
+					'The crop area is outside the image.',
+					'indigit-imagination'
+				),
 				$this->file
 			);
 		}
@@ -1318,11 +1321,10 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 					new \WP_Error(
 						'image_save_error',
 						sprintf(
-							/* translators: %s: Directory path. */
+							/* translators: %s: Folder path. */
 							__(
-								'Unable to create directory %s. Is its parent directory writable by the server?',
-								// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
-								'default'
+								'The folder %s could not be created. Check that the web server can write to its parent folder.',
+								'indigit-imagination'
 							),
 							esc_html( $dirname )
 						)
@@ -1383,7 +1385,10 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 			return $this->log_error(
 				new \WP_Error(
 					'image_save_error',
-					__( 'Could not save the image file.', 'imagination' ),
+					__(
+						'Could not save the image file.',
+						'indigit-imagination'
+					),
 					$filename
 				),
 				__FUNCTION__,
@@ -1463,9 +1468,8 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 			return new \WP_Error(
 				'error_getting_dimensions',
 				__(
-					'Could not calculate resized image dimensions',
-					// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
-					'default'
+					'Could not determine the dimensions for the requested size.',
+					'indigit-imagination'
 				),
 				$this->file
 			);
@@ -1529,7 +1533,7 @@ class Image_Editor_Libvips extends \WP_Image_Editor {
 		if ( ! $this->image instanceof Image ) {
 			return new \WP_Error(
 				'image_stream_error',
-				__( 'Image is not loaded.', 'imagination' ),
+				__( 'Image is not loaded.', 'indigit-imagination' ),
 				$this->file
 			);
 		}

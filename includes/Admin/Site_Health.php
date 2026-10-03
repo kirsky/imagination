@@ -74,12 +74,12 @@ final class Site_Health {
 
 		$fields = [
 			'status'           => [
-				'label' => __( 'libvips image editor', 'imagination' ),
+				'label' => __( 'libvips image editor', 'indigit-imagination' ),
 				'value' => null === $unmet
-					? __( 'Available', 'imagination' )
+					? __( 'Available', 'indigit-imagination' )
 					: sprintf(
 						/* translators: %s: Why the editor cannot run. */
-						__( 'Not available: %s', 'imagination' ),
+						__( 'Not available: %s', 'indigit-imagination' ),
 						$unmet
 					),
 				'debug' => null === $unmet
@@ -88,8 +88,11 @@ final class Site_Health {
 			],
 
 			'php_vips_version' => [
-				'label' => __( 'php-vips version', 'imagination' ),
-				'value' => $php_vips_version ?? __( 'Unknown', 'imagination' ),
+				'label' => __( 'php-vips version', 'indigit-imagination' ),
+				'value' => $php_vips_version ?? __(
+					'Unknown',
+					'indigit-imagination'
+				),
 				'debug' => $php_vips_version ?? 'unknown',
 			],
 		];
@@ -101,10 +104,10 @@ final class Site_Health {
 		$fields['recent_errors'] = $this->get_errors_field();
 
 		$info['imagination'] = [
-			'label'       => __( 'Imagination', 'imagination' ),
+			'label'       => __( 'Indigit Imagination', 'indigit-imagination' ),
 			'description' => __(
-				'Image processing information provided by the Imagination plugin.',
-				'imagination'
+				'Image processing information provided by the Indigit Imagination plugin.',
+				'indigit-imagination'
 			),
 			'fields'      => $fields,
 		];
@@ -120,40 +123,40 @@ final class Site_Health {
 	private function get_runtime_fields(): array {
 		$fields = [
 			'libvips_version' => [
-				'label' => __( 'libvips version', 'imagination' ),
+				'label' => __( 'libvips version', 'indigit-imagination' ),
 				'value' => $this->runtime->get_version(),
 			],
 			'input_formats'   => $this->get_list_field(
-				__( 'Input formats', 'imagination' ),
+				__( 'Input formats', 'indigit-imagination' ),
 				$this->runtime->get_input_formats()
 			),
 			'output_formats'  => $this->get_list_field(
-				__( 'Output formats', 'imagination' ),
+				__( 'Output formats', 'indigit-imagination' ),
 				$this->runtime->get_output_formats()
 			),
 			'threads'         => [
-				'label' => __( 'Worker threads', 'imagination' ),
+				'label' => __( 'Worker threads', 'indigit-imagination' ),
 				'value' => $this->runtime->get_concurrency(),
 			],
 			'processors'      => [
-				'label' => __( 'Processors', 'imagination' ),
+				'label' => __( 'Processors', 'indigit-imagination' ),
 				'value' => $this->runtime->get_processor_count(),
 			],
 			'vector'          => $this->get_vector_field(),
 			'environment'     => $this->get_map_field(
-				__( 'Environment variables', 'imagination' ),
+				__( 'Environment variables', 'indigit-imagination' ),
 				$this->runtime->get_environment()
 			),
 			'libheif_version' => [
-				'label' => __( 'libheif version', 'imagination' ),
+				'label' => __( 'libheif version', 'indigit-imagination' ),
 				'value' => $this->runtime->get_heif_version(),
 			],
 			'heif_decoders'   => $this->get_codecs_field(
-				__( 'libheif decoders', 'imagination' ),
+				__( 'libheif decoders', 'indigit-imagination' ),
 				$this->runtime->get_heif_decoders()
 			),
 			'heif_encoders'   => $this->get_codecs_field(
-				__( 'libheif encoders', 'imagination' ),
+				__( 'libheif encoders', 'indigit-imagination' ),
 				$this->runtime->get_heif_encoders()
 			),
 			'libraries'       => $this->get_libraries_field(),
@@ -174,12 +177,12 @@ final class Site_Health {
 	 * @return array<string, mixed>
 	 */
 	private function get_errors_field(): array {
-		$label = __( 'Recent errors', 'imagination' );
+		$label = __( 'Recent errors', 'indigit-imagination' );
 
 		if ( ! Log::is_enabled() ) {
 			return [
 				'label' => $label,
-				'value' => __( 'Error logging is off', 'imagination' ),
+				'value' => __( 'Error logging is off', 'indigit-imagination' ),
 				'debug' => 'logging off',
 			];
 		}
@@ -217,7 +220,7 @@ final class Site_Health {
 			trim( $image ),
 			$error->sapi . ', ' . $error->context,
 			sprintf(
-				'libvips %s, Imagination %s',
+				'libvips %s, Indigit Imagination %s',
 				$error->libvips_version,
 				$error->plugin_version
 			),
@@ -249,7 +252,7 @@ final class Site_Health {
 		return [
 			'label' => $label,
 			'value' => [] === $items
-				? __( 'None', 'imagination' )
+				? __( 'None', 'indigit-imagination' )
 				: implode( ', ', $items ),
 			'debug' => [] === $items ? 'none' : implode( ', ', $items ),
 		];
@@ -265,7 +268,10 @@ final class Site_Health {
 	private function get_map_field( string $label, array $values ): array {
 		return [
 			'label' => $label,
-			'value' => [] === $values ? __( 'None', 'imagination' ) : $values,
+			'value' => [] === $values ? __(
+				'None',
+				'indigit-imagination'
+			) : $values,
 			'debug' => [] === $values ? 'none' : $values,
 		];
 	}
@@ -280,7 +286,7 @@ final class Site_Health {
 		$enabled = $this->runtime->is_vector_enabled();
 		$target  = $this->runtime->get_vector_target();
 		$field   = [
-			'label' => __( 'SIMD', 'imagination' ),
+			'label' => __( 'SIMD', 'indigit-imagination' ),
 			'value' => null,
 		];
 
@@ -290,14 +296,14 @@ final class Site_Health {
 
 		if ( ! $enabled ) {
 			return [
-				'value' => __( 'Disabled', 'imagination' ),
+				'value' => __( 'Disabled', 'indigit-imagination' ),
 				'debug' => 'disabled',
 			] + $field;
 		}
 
 		if ( null === $target ) {
 			return [
-				'value' => __( 'Enabled', 'imagination' ),
+				'value' => __( 'Enabled', 'indigit-imagination' ),
 				'debug' => 'enabled',
 			] + $field;
 		}
@@ -305,7 +311,7 @@ final class Site_Health {
 		return [
 			'value' => sprintf(
 				/* translators: %s: SIMD instruction set, e.g. AVX2. */
-				__( 'Enabled (%s)', 'imagination' ),
+				__( 'Enabled (%s)', 'indigit-imagination' ),
 				$target
 			),
 			'debug' => sprintf( 'enabled (%s)', $target ),
@@ -334,7 +340,7 @@ final class Site_Health {
 			$list = implode( ' | ', $names );
 
 			$value[ $format ] = '' === $list
-				? __( 'None', 'imagination' )
+				? __( 'None', 'indigit-imagination' )
 				: $list;
 			$debug[ $format ] = '' === $list ? 'none' : $list;
 		}
@@ -353,13 +359,13 @@ final class Site_Health {
 	 * @return array<string, mixed>
 	 */
 	private function get_libraries_field(): array {
-		$label     = __( 'Loaded image libraries', 'imagination' );
+		$label     = __( 'Loaded image libraries', 'indigit-imagination' );
 		$libraries = $this->runtime->get_loaded_libraries();
 
 		if ( null === $libraries ) {
 			return [
 				'label' => $label,
-				'value' => __( 'Not readable', 'imagination' ),
+				'value' => __( 'Not readable', 'indigit-imagination' ),
 				'debug' => 'not readable',
 			];
 		}
@@ -383,7 +389,7 @@ final class Site_Health {
 	 */
 	public function add_status_test( array $tests ): array {
 		$tests['direct'][ self::TEST ] = [
-			'label' => __( 'libvips image editor', 'imagination' ),
+			'label' => __( 'libvips image editor', 'indigit-imagination' ),
 			'test'  => [ $this, 'get_status_test_result' ],
 		];
 
@@ -401,7 +407,7 @@ final class Site_Health {
 		$unmet  = $this->runtime->describe_unmet_requirement();
 		$result = [
 			'badge'   => [
-				'label' => __( 'Performance', 'imagination' ),
+				'label' => __( 'Performance', 'indigit-imagination' ),
 				'color' => 'blue',
 			],
 			'actions' => '',
@@ -412,7 +418,7 @@ final class Site_Health {
 			return $result + [
 				'label'       => __(
 					'Images are processed with libvips',
-					'imagination'
+					'indigit-imagination'
 				),
 				'status'      => 'good',
 				'description' => sprintf(
@@ -421,8 +427,8 @@ final class Site_Health {
 						sprintf(
 							/* translators: %s: libvips version. */
 							__(
-								'Imagination processes images with libvips %s.',
-								'imagination'
+								'Indigit Imagination processes images with libvips %s.',
+								'indigit-imagination'
 							),
 							$this->runtime->get_version()
 						)
@@ -433,8 +439,8 @@ final class Site_Health {
 
 		return $result + [
 			'label'       => __(
-				'Imagination cannot use libvips',
-				'imagination'
+				'Indigit Imagination cannot use libvips',
+				'indigit-imagination'
 			),
 			'status'      => 'recommended',
 			'description' => sprintf(
@@ -442,7 +448,7 @@ final class Site_Health {
 				esc_html( $unmet ),
 				esc_html__(
 					'WordPress processes images with its built-in editors (Imagick or GD) until this is fixed.',
-					'imagination'
+					'indigit-imagination'
 				)
 			),
 		];

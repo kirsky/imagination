@@ -4,7 +4,7 @@
     "type": "wordpress-plugin",
     "version": "1.0.0",
     "license": "GPL-2.0-or-later",
-    "homepage": "https://indigit.info/imagination/",
+    "homepage": "https://indigit.info/indigit-imagination/",
     "authors": [
         {
             "name": "Kirill S.",
@@ -51,6 +51,7 @@
         }
     },
     "extra": {
+        "installer-name": "indigit-imagination",
         "strauss": {
             "namespace_prefix": "Indigit\\Imagination\\Vendor\\",
             "classmap_prefix": "Indigit_Imagination_Vendor_",
